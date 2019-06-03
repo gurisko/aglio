@@ -6,6 +6,7 @@ http = require 'http'
 path = require 'path'
 PrettyError = require 'pretty-error'
 serveStatic = require 'serve-static'
+url = require 'url'
 parser = require('yargs')
     .usage('Usage: $0 [options] -i infile [-o outfile -s]')
     .example('$0 -i example.apib -o output.html', 'Render to HTML')
@@ -119,7 +120,7 @@ exports.run = (argv=parser.argv, done=->) ->
 
         getHtml()
         server = http.createServer((req, res) ->
-            if req.url isnt '/'
+            if url.parse(req.url).pathname isnt '/'
                 serve = serveStatic(path.dirname(argv.i))
                 return serve(req, res, () -> res.end())
 
